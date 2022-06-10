@@ -1,0 +1,11 @@
+---
+- name: Remove all apache, php, and nginx software
+  apt:
+    name:
+      - apache2*
+      - php*
+      - nginx*
+    state: absent
+    purge: yes
+    autoremove: yes
+  become: yes

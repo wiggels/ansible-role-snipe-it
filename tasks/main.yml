@@ -1,0 +1,18 @@
+---
+# tasks file for snipe-it
+- name: Cleanup previous installations if set to true
+  ansible.builtin.include_tasks: clean_server_installs.yml
+  when: snipe_cleanup
+
+- name: Install required packages
+  ansible.builtin.include_tasks: install_packages.yml
+
+- name: Install and configure http server
+  ansible.builtin.include_tasks: "{{ snipe_http_server }}.yml"
+
+- name: Install and configure database server
+  ansible.builtin.include_tasks: "{{ snipe_database_software }}.yml"
+  when: snipe_db_host == 'localhost'
+
+- name: Install/Upgrade Snipe-IT
+  ansible.builtin.include_tasks: "snipeit.yml"

@@ -1,0 +1,53 @@
+---
+# defaults file for snipe-it
+
+snipe_cleanup: false
+snipe_install_dir: /opt/snipe-it
+snipe_install_version: 6.0.2
+snipe_php_ver: 8.1
+snipe_http_server: nginx
+snipe_domain: localhost
+snipe_ssl_enabled: false
+snipe_http_protocol: "{{ 'https://' if (snipe_ssl_enabled == true) else 'http://' }}"
+snipe_database_software: mysql
+
+snipe_app_env: production
+snipe_app_debug: false
+snipe_app_key: ChangeMe
+snipe_app_url: "{{ snipe_http_protocol }}{{ snipe_domain }}"
+snipe_app_timezone: America/New_York
+snipe_app_locale: en
+
+snipe_db_host: localhost
+snipe_db_database: snipeit
+snipe_db_username: snipeit
+snipe_db_password: ChangeMe
+snipe_db_prefix: "null"
+snipe_db_dump_path: /usr/bin
+snipe_db_port: 3306
+
+snipe_mail_driver: smtp
+snipe_mail_host: localhost
+snipe_mail_port: 25
+snipe_mail_username: false
+snipe_mail_password: false
+snipe_mail_encryption: "null"
+snipe_mail_from_addr: snipe-it@example.com
+snipe_mail_from_name: Snipe-IT
+snipe_mail_replyto_addr: false
+snipe_mail_replyto_name: false
+snipe_mail_auto_embed: true
+snipe_mail_auto_embed_method: base64
+
+snipe_image_lib: gd
+
+snipe_session_lifetime: 30
+snipe_expire_on_close: false
+snipe_encrypt: false
+snipe_cookie_name: snipeit_session
+snipe_cookie_domain: "null" 
+snipe_secure_cookies: "{{ snipe_ssl_enabled }}"
+snipe_api_token_expiration_years: 40
+
+snipe_login_max_attempts: 5
+snipe_login_lockout_duration: 60

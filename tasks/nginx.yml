@@ -1,0 +1,38 @@
+---
+- name: Install NGINX
+  ansible.builtin.include_role:
+    name: nginx
+  become: yes
+
+- name: Configure NGINX
+  ansible.builtin.include_role:
+    name: nginx_config
+  vars:
+    nginx_config_main_template_enable: true
+    nginx_config_main_template:
+      template_file: nginx.conf.j2
+      deployment_location: /etc/nginx/nginx.conf
+      backup: false
+      config:
+        main:
+        http:
+          include:
+            - /etc/nginx/conf.d/*.conf
+            - /etc/nginx/mime.types
+  become: yes
+
+- name: Configure NGINX for Snipe-IT
+  ansible.builtin.template:
+    src: templates/snipeit.conf.j2
+    dest: /etc/nginx/conf.d/snipeit.conf
+    owner: root
+    group: root
+    mode: '0444'
+  become: yes
+
+- name: Enable and start PHP FPM service
+  ansible.builtin.service:
+    name: "php{{ snipe_php_ver }}-fpm"
+    state: started
+    enabled: yes
+  become: yes

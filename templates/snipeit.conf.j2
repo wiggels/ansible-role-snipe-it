@@ -1,0 +1,20 @@
+{% if snipe_ssl_enabled == false %}
+server {
+  listen 80 default_server;
+  listen [::]:80 default_server;
+  root {{snipe_install_dir}}/public;
+  index index.php index.html;
+  server_name {{snipe_domain}};
+  location / {
+    try_files $uri $uri/ /index.php$is_args$args;
+  }
+  location ~* \.php$ {
+    fastcgi_pass unix:/run/php/php{{ snipe_php_ver }}-fpm.sock;
+    include fastcgi_params;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    fastcgi_param SCRIPT_NAME $fastcgi_script_name;
+  }
+}
+{% else %}
+
+{% endif %}

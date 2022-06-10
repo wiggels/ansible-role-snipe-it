@@ -1,0 +1,23 @@
+galaxy_info:
+  role_name: snipeit
+  author: Hunter Wigelsworth
+  description: Install and Configure Snipe-IT
+
+  license: MIT
+
+  min_ansible_version: 2.9
+
+  platforms:
+    - name: Ubuntu
+      versions:
+        - focal
+        - jammy
+
+  galaxy_tags: 
+    - snipe-it
+    - inventory
+
+  collections:
+    - nginxinc.nginx_core
+
+dependencies: []

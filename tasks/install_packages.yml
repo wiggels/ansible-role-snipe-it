@@ -1,0 +1,51 @@
+---
+- name: Add php ppa repos
+  ansible.builtin.apt_repository:
+    repo: ppa:ondrej/php
+  become: yes
+
+- name: Install prerequisites
+  ansible.builtin.apt:
+    name:
+      - software-properties-common
+      - git
+      - debconf-utils
+      - unzip
+      - php-common
+      - php-pear
+      - curl
+      - gnupg2
+      - ca-certificates
+      - lsb-release
+      - ubuntu-keyring
+    state: present
+  become: yes
+
+- name: "Install php {{ snipe_php_ver }}"
+  ansible.builtin.apt:
+    name:
+      - "php{{ snipe_php_ver }}-fpm"
+      - "php{{ snipe_php_ver }}-bcmath"
+      - "php{{ snipe_php_ver }}-cli"
+      - "php{{ snipe_php_ver }}-common"
+      - "php{{ snipe_php_ver }}-curl"
+      - "php{{ snipe_php_ver }}-dev"
+      - "php{{ snipe_php_ver }}-gd"
+      - "php{{ snipe_php_ver }}-intl"
+      - "php{{ snipe_php_ver }}-json"
+      - "php{{ snipe_php_ver }}-ldap"
+      - "php{{ snipe_php_ver }}-mbstring"
+      - "php{{ snipe_php_ver }}-mysql"
+      - "php{{ snipe_php_ver }}-opcache"
+      - "php{{ snipe_php_ver }}-readline"
+      - "php{{ snipe_php_ver }}-xml"
+      - "php{{ snipe_php_ver }}-zip"
+    state: present
+  become: yes
+
+- name: Enable and start PHP FPM service
+  ansible.builtin.service:
+    name: "php{{ snipe_php_ver }}-fpm"
+    state: started
+    enabled: yes
+  become: yes
