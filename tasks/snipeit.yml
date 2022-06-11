@@ -16,6 +16,12 @@
   when: env_file.stat.exists
   become: yes
 
+- name: Trust snipe-it git directory
+  ansible.builtin.shell: "git config --global --add safe.directory /opt/snipe-it"
+  args:
+    chdir: "{{ snipe_install_dir }}"
+  become: yes
+
 - name: Checkout v{{ snipe_install_version }} of Snipe-IT
   ansible.builtin.git:
     repo: 'https://github.com/snipe/snipe-it.git'
