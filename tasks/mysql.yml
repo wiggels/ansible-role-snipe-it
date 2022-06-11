@@ -46,4 +46,5 @@
     password: "{{ snipe_db_password }}"
     priv: "{{ snipe_db_database }}.*:ALL"
     state: present
-  become: yes3
+  become: yes
+  
