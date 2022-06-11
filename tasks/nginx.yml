@@ -17,9 +17,9 @@
       backup: false
       config:
         main:
-        user:
-          username: www-data
-          group: www-data
+          user:
+            username: www-data
+            group: www-data
         http:
           include:
             - /etc/nginx/conf.d/*.conf
