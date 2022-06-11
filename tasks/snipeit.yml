@@ -5,7 +5,7 @@
   become: yes
 
 - name: Read current .env
-  ansible.builtin.shell: "grep -oP 'APP_KEY=\K\S*' {{ snipe_install_dir }}/.env"
+  ansible.builtin.shell: "grep -oP 'APP_KEY=\\K\\S*' {{ snipe_install_dir }}/.env"
   register: app_key_gather
   when: env_file.stat.exists
   become: yes
