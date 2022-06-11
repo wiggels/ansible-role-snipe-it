@@ -3,7 +3,7 @@
   ansible.builtin.apt:
     name: 
       - mysql-server
-      - python-mysqldb
+      - python3-mysqldb
     state: present
   become: yes
 
@@ -46,4 +46,4 @@
     password: "{{ snipe_db_password }}"
     priv: "{{ snipe_db_database }}.*:ALL"
     state: present
-  become: yes
+  become: yes3
