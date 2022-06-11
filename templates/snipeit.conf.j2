@@ -2,6 +2,7 @@
 server {
   listen 80 default_server;
   listen [::]:80 default_server;
+  server_name {{ snipe_domain }};
   root {{snipe_install_dir}}/public;
   index index.php index.html;
   location / {
