@@ -30,10 +30,11 @@
     group: root
     mode: '0444'
   become: yes
+  notify: restart nginx
 
-- name: Enable and start PHP FPM service
+- name: Enable and start nginx service
   ansible.builtin.service:
-    name: "php{{ snipe_php_ver }}-fpm"
+    name: nginx
     state: started
     enabled: yes
   become: yes

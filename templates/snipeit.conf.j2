@@ -4,7 +4,6 @@ server {
   listen [::]:80 default_server;
   root {{snipe_install_dir}}/public;
   index index.php index.html;
-  server_name {{snipe_domain}};
   location / {
     try_files $uri $uri/ /index.php$is_args$args;
   }
