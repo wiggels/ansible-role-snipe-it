@@ -21,6 +21,7 @@
     repo: 'https://github.com/snipe/snipe-it.git'
     dest: "{{ snipe_install_dir }}"
     version: "v{{ snipe_install_version }}"
+  become: yes
 
 - name: Write .env file to snipe-it directory
   ansible.builtin.template:
