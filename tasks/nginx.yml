@@ -1,13 +1,13 @@
 ---
 - name: Install NGINX
   ansible.builtin.include_role:
-    name: nginx
+    name: nginxinc.nginx_core.nginx
   vars:
     ansible_become: yes
 
 - name: Configure NGINX
   ansible.builtin.include_role:
-    name: nginx_config
+    name: nginxinc.nginx_core.nginx_config
   vars:
     ansible_become: yes
     nginx_config_main_template_enable: true
