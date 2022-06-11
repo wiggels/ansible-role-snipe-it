@@ -2,12 +2,14 @@
 - name: Install NGINX
   ansible.builtin.include_role:
     name: nginx
-  become: yes
+  vars:
+    ansible_become: yes
 
 - name: Configure NGINX
   ansible.builtin.include_role:
     name: nginx_config
   vars:
+    ansible_become: yes
     nginx_config_main_template_enable: true
     nginx_config_main_template:
       template_file: nginx.conf.j2
@@ -19,7 +21,6 @@
           include:
             - /etc/nginx/conf.d/*.conf
             - /etc/nginx/mime.types
-  become: yes
 
 - name: Configure NGINX for Snipe-IT
   ansible.builtin.template:
