@@ -39,7 +39,7 @@
   become: yes
 
 - name: Install snipe dependencies
-  ansible.builtin.command: "export COMPOSER_ALLOW_SUPERUSER=1; php composer.phar install --no-dev --prefer-source"
+  ansible.builtin.shell: "export COMPOSER_ALLOW_SUPERUSER=1; php composer.phar install --no-dev --prefer-source"
   args:
     chdir: "{{ snipe_install_dir }}"
     creates: "{{ snipe_install_dir }}/vendor"
@@ -47,7 +47,7 @@
   become: yes
 
 - name: Dump auto-load
-  ansible.builtin.command: "export COMPOSER_ALLOW_SUPERUSER=1; php composer.phar dump-autoload"
+  ansible.builtin.shell: "export COMPOSER_ALLOW_SUPERUSER=1; php composer.phar dump-autoload"
   args:
     chdir: "{{ snipe_install_dir }}"
     warn: no
