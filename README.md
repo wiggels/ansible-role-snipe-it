@@ -23,7 +23,7 @@ Example Playbook
 
     - hosts: all
       tasks:
-        - name: Configure port forwarding
+        - name: Install and Configure Snipe-IT
           ansible.builtin.include_role: 
             name: wiggels.snipeit
           vars:

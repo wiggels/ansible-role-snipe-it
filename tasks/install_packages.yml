@@ -32,7 +32,6 @@
       - "php{{ snipe_php_ver }}-dev"
       - "php{{ snipe_php_ver }}-gd"
       - "php{{ snipe_php_ver }}-intl"
-      - "php{{ snipe_php_ver }}-json"
       - "php{{ snipe_php_ver }}-ldap"
       - "php{{ snipe_php_ver }}-mbstring"
       - "php{{ snipe_php_ver }}-mysql"
