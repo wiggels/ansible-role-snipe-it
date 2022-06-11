@@ -62,7 +62,7 @@
   become: yes
 
 - name: Run migrate commands
-  ansible.builtin.command: php artisan migrate
+  ansible.builtin.command: php artisan migrate --force
   args:
     chdir: "{{ snipe_install_dir }}"
     warn: no
