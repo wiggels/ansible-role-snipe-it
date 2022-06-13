@@ -8,6 +8,8 @@ snipe_php_ver: 8.1
 snipe_http_server: nginx
 snipe_domain: localhost
 snipe_ssl_enabled: false
+snipe_ssl_key: "/etc/ssl/private/{{ snipe_domain }}.key"
+snipe_ssl_cert: "/etc/ssl/certs/{{ snipe_domain }}-fullchain.crt"
 snipe_http_protocol: "{{ 'https://' if (snipe_ssl_enabled == true) else 'http://' }}"
 snipe_database_software: mysql
 
