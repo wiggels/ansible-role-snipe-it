@@ -8,7 +8,7 @@
   ansible.builtin.file:
      path: "{{ snipe_install_dir }}"
      state: directory
-    mode: '0753'
+    mode: '0755'
   when: not snipeit_folder_check.stat.exists
   become: yes
 
