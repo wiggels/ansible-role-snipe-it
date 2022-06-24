@@ -6,8 +6,8 @@
 
 - name: Create folder if it doesnt exist
   ansible.builtin.file:
-     path: "{{ snipe_install_dir }}"
-     state: directory
+    path: "{{ snipe_install_dir }}"
+    state: directory
     mode: '0755'
   when: not snipeit_folder_check.stat.exists
   become: yes
