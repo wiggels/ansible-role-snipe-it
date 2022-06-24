@@ -1,3 +1,17 @@
+- name: Check if install-folder already exists
+  ansible.builtin.stat:
+    path: "{{ snipe_install_dir }}"
+  register: snipeit_folder_check
+  become: yes
+
+- name: Create folder if it doesnt exist
+  ansible.builtin.file:
+    path: "{{ snipe_install_dir }}"
+    state: directory
+    mode: '0755'
+  when: not snipeit_folder_check.stat.exists
+  become: yes
+
 - name: Check if .env already exists
   ansible.builtin.stat: 
     path: "{{ snipe_install_dir }}/.env"
