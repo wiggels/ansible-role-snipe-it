@@ -3,7 +3,7 @@
 
 snipe_cleanup: false
 snipe_install_dir: /opt/snipe-it
-snipe_install_version: 6.0.5
+snipe_install_version: 6.0.6
 snipe_php_ver: 8.1
 snipe_http_server: nginx
 snipe_domain: localhost
@@ -53,3 +53,6 @@ snipe_api_token_expiration_years: 40
 
 snipe_login_max_attempts: 5
 snipe_login_lockout_duration: 60
+
+snipe_allow_backup_delete: false
+snipe_allow_data_purge: false
