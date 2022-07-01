@@ -13,7 +13,7 @@
   become: true
 
 - name: Check if .env already exists
-  ansible.builtin.stat: 
+  ansible.builtin.stat:
     path: "{{ snipe_install_dir }}/.env"
   register: env_file
   become: true
@@ -30,12 +30,6 @@
   when: env_file.stat.exists
   become: true
 
-- name: Trust snipe-it git directory
-  ansible.builtin.shell: "git config --global --add safe.directory /opt/snipe-it"
-  args:
-    chdir: "{{ snipe_install_dir }}"
-  become: true
-
 - name: Checkout v{{ snipe_install_version }} of Snipe-IT
   ansible.builtin.git:
     repo: 'https://github.com/snipe/snipe-it.git'
@@ -47,10 +41,13 @@
   ansible.builtin.template:
     src: .env.j2
     dest: "{{ snipe_install_dir }}/.env"
+    owner: www-data
+    group: www-data
+    mode: '0444'
   become: true
 
 - name: Install composer
-  ansible.builtin.shell: curl -sS https://getcomposer.org/installer | php
+  ansible.builtin.shell: set -o pipefail && curl -sS https://getcomposer.org/installer | php
   args:
     chdir: "{{ snipe_install_dir }}"
     executable: /bin/bash
@@ -71,6 +68,7 @@
   args:
     chdir: "{{ snipe_install_dir }}"
     warn: false
+  changed_when: true
   become: true
 
 - name: Generate app_key
@@ -86,6 +84,7 @@
   args:
     chdir: "{{ snipe_install_dir }}"
     warn: false
+  changed_when: true
   become: true
 
 - name: Clear config
@@ -93,6 +92,7 @@
   args:
     chdir: "{{ snipe_install_dir }}"
     warn: false
+  changed_when: true
   become: true
 
 - name: Clear cache
@@ -100,6 +100,7 @@
   args:
     chdir: "{{ snipe_install_dir }}"
     warn: false
+  changed_when: true
   become: true
 
 - name: Reset ownership
