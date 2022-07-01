@@ -3,13 +3,13 @@
   ansible.builtin.include_role:
     name: nginxinc.nginx_core.nginx
   vars:
-    ansible_become: yes
+    ansible_become: true
 
 - name: Configure NGINX
   ansible.builtin.include_role:
     name: nginxinc.nginx_core.nginx_config
   vars:
-    ansible_become: yes
+    ansible_become: true
     nginx_config_main_template_enable: true
     nginx_config_main_template:
       template_file: nginx.conf.j2
@@ -32,12 +32,12 @@
     owner: root
     group: root
     mode: '0444'
-  become: yes
+  become: true
   notify: restart nginx
 
 - name: Enable and start nginx service
   ansible.builtin.service:
     name: nginx
     state: started
-    enabled: yes
-  become: yes
+    enabled: true
+  become: true

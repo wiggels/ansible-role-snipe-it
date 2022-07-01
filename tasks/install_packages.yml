@@ -2,7 +2,7 @@
 - name: Add php ppa repos
   ansible.builtin.apt_repository:
     repo: ppa:ondrej/php
-  become: yes
+  become: true
 
 - name: Install prerequisites
   ansible.builtin.apt:
@@ -19,7 +19,7 @@
       - lsb-release
       - ubuntu-keyring
     state: present
-  become: yes
+  become: true
 
 - name: "Install php {{ snipe_php_ver }}"
   ansible.builtin.apt:
@@ -40,11 +40,11 @@
       - "php{{ snipe_php_ver }}-xml"
       - "php{{ snipe_php_ver }}-zip"
     state: present
-  become: yes
+  become: true
 
 - name: Enable and start PHP FPM service
   ansible.builtin.service:
     name: "php{{ snipe_php_ver }}-fpm"
     state: started
-    enabled: yes
-  become: yes
+    enabled: true
+  become: true

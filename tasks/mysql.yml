@@ -5,40 +5,40 @@
       - mysql-server
       - python3-mysqldb
     state: present
-  become: yes
+  become: true
 
 - name: Enable and start mysql
   ansible.builtin.service:
     name: mysql
     state: started
-    enabled: yes
-  become: yes
+    enabled: true
+  become: true
 
 - name: Delete anonymous user
   community.mysql.mysql_user: 
     name: ""
-    host_all: yes
+    host_all: true
     state: absent
-  become: yes
+  become: true
 
 - name: Delete hostname-based root user
   community.mysql.mysql_user:
     name: root
     host: "{{ansible_nodename}}"
     state: absent
-  become: yes
+  become: true
 
 - name: Remove test database
   community.mysql.mysql_db:
     name: test
     state: absent
-  become: yes
+  become: true
 
 - name: Create snipeit database
   community.mysql.mysql_db:
     name: "{{ snipe_db_database }}"
     state: present
-  become: yes
+  become: true
 
 - name: Create snipeit user
   community.mysql.mysql_user:
@@ -46,5 +46,4 @@
     password: "{{ snipe_db_password }}"
     priv: "{{ snipe_db_database }}.*:ALL"
     state: present
-  become: yes
-  
+  become: true

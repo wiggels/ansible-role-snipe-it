@@ -2,7 +2,7 @@
   ansible.builtin.stat:
     path: "{{ snipe_install_dir }}"
   register: snipeit_folder_check
-  become: yes
+  become: true
 
 - name: Create folder if it doesnt exist
   ansible.builtin.file:
@@ -10,44 +10,44 @@
     state: directory
     mode: '0755'
   when: not snipeit_folder_check.stat.exists
-  become: yes
+  become: true
 
 - name: Check if .env already exists
   ansible.builtin.stat: 
     path: "{{ snipe_install_dir }}/.env"
   register: env_file
-  become: yes
+  become: true
 
 - name: Read current .env
   ansible.builtin.shell: "grep -oP 'APP_KEY=\\K\\S*' {{ snipe_install_dir }}/.env"
   register: app_key_gather
   when: env_file.stat.exists
-  become: yes
+  become: true
 
 - name: Set gathered app_key fact
   ansible.builtin.set_fact:
     snipe_app_key: "{{ app_key_gather.stdout }}"
   when: env_file.stat.exists
-  become: yes
+  become: true
 
 - name: Trust snipe-it git directory
   ansible.builtin.shell: "git config --global --add safe.directory /opt/snipe-it"
   args:
     chdir: "{{ snipe_install_dir }}"
-  become: yes
+  become: true
 
 - name: Checkout v{{ snipe_install_version }} of Snipe-IT
   ansible.builtin.git:
     repo: 'https://github.com/snipe/snipe-it.git'
     dest: "{{ snipe_install_dir }}"
     version: "v{{ snipe_install_version }}"
-  become: yes
+  become: true
 
 - name: Write .env file to snipe-it directory
   ansible.builtin.template:
     src: .env.j2
     dest: "{{ snipe_install_dir }}/.env"
-  become: yes
+  become: true
 
 - name: Install composer
   ansible.builtin.shell: curl -sS https://getcomposer.org/installer | php
@@ -55,57 +55,57 @@
     chdir: "{{ snipe_install_dir }}"
     executable: /bin/bash
     creates: "{{ snipe_install_dir }}/composer.phar"
-    warn: no
-  become: yes
+    warn: false
+  become: true
 
 - name: Install snipe dependencies
   ansible.builtin.shell: "export COMPOSER_ALLOW_SUPERUSER=1; php composer.phar install --no-dev --prefer-source"
   args:
     chdir: "{{ snipe_install_dir }}"
     creates: "{{ snipe_install_dir }}/vendor"
-    warn: no
-  become: yes
+    warn: false
+  become: true
 
 - name: Dump auto-load
   ansible.builtin.shell: "export COMPOSER_ALLOW_SUPERUSER=1; php composer.phar dump-autoload"
   args:
     chdir: "{{ snipe_install_dir }}"
-    warn: no
-  become: yes
+    warn: false
+  become: true
 
 - name: Generate app_key
   ansible.builtin.command: php artisan key:generate --force
   args:
     chdir: "{{ snipe_install_dir }}"
-    warn: no
+    warn: false
   when: snipe_app_key == 'ChangeMe'
-  become: yes
+  become: true
 
 - name: Run migrate commands
   ansible.builtin.command: php artisan migrate --force
   args:
     chdir: "{{ snipe_install_dir }}"
-    warn: no
-  become: yes
+    warn: false
+  become: true
 
 - name: Clear config
   ansible.builtin.command: php artisan config:clear
   args:
     chdir: "{{ snipe_install_dir }}"
-    warn: no
-  become: yes
+    warn: false
+  become: true
 
 - name: Clear cache
   ansible.builtin.command: php artisan config:cache
   args:
     chdir: "{{ snipe_install_dir }}"
-    warn: no
-  become: yes
+    warn: false
+  become: true
 
 - name: Reset ownership
   ansible.builtin.file:
     path: "{{ snipe_install_dir }}"
     owner: www-data
     group: www-data
-    recurse: yes
-  become: yes
+    recurse: true
+  become: true
