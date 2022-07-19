@@ -1,7 +1,7 @@
 ---
 - name: Install mysql-server
   ansible.builtin.apt:
-    name: 
+    name:
       - mysql-server
       - python3-mysqldb
     state: present
@@ -15,7 +15,7 @@
   become: true
 
 - name: Delete anonymous user
-  community.mysql.mysql_user: 
+  community.mysql.mysql_user:
     name: ""
     host_all: true
     state: absent
@@ -24,7 +24,7 @@
 - name: Delete hostname-based root user
   community.mysql.mysql_user:
     name: root
-    host: "{{ansible_nodename}}"
+    host: "{{ ansible_nodename }}"
     state: absent
   become: true
 

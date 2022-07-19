@@ -3,12 +3,18 @@
 
 - name: restart mysql
   become: true
-  service: name=mysql state=restarted
+  ansible.builtin.service:
+    name: mysql
+    state: restarted
 
 - name: restart apache
   become: true
-  service: name=apache2 state=restarted
+  ansible.builtin.service:
+    name: apache2
+    state: restarted
 
 - name: restart nginx
   become: true
-  service: name=nginx state=restarted
+  ansible.builtin.service:
+    name: nginx
+    state: restarted
