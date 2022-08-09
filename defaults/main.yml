@@ -3,7 +3,7 @@
 
 snipe_cleanup: false
 snipe_install_dir: /opt/snipe-it
-snipe_install_version: 6.0.8
+snipe_install_version: 6.0.9
 snipe_php_ver: 8.1
 snipe_http_server: nginx
 snipe_domain: localhost
