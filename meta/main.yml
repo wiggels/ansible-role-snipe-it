@@ -1,5 +1,6 @@
 galaxy_info:
   role_name: snipeit
+  namespace: wiggels
   author: Hunter Wigelsworth
   description: Install and Configure Snipe-IT
 
