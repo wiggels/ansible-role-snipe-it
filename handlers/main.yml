@@ -1,19 +1,7 @@
 ---
 # handlers file for snipe-it
 
-- name: restart mysql
-  become: true
-  ansible.builtin.service:
-    name: mysql
-    state: restarted
-
-- name: restart apache
-  become: true
-  ansible.builtin.service:
-    name: apache2
-    state: restarted
-
-- name: restart nginx
+- name: Restart NGINX
   become: true
   ansible.builtin.service:
     name: nginx

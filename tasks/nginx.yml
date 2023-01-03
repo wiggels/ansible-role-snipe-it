@@ -33,7 +33,7 @@
     group: root
     mode: '0444'
   become: true
-  notify: restart nginx
+  notify: Restart NGINX
 
 - name: Enable and start nginx service
   ansible.builtin.service:

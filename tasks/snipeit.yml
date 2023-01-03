@@ -30,7 +30,7 @@
   when: env_file.stat.exists
   become: true
 
-- name: Checkout v{{ snipe_install_version }} of Snipe-IT
+- name: "Checkout Snipe-IT v{{ snipe_install_version }}"
   ansible.builtin.git:
     repo: 'https://github.com/snipe/snipe-it.git'
     dest: "{{ snipe_install_dir }}"
