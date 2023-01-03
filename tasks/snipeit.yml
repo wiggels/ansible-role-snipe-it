@@ -52,7 +52,6 @@
     chdir: "{{ snipe_install_dir }}"
     executable: /bin/bash
     creates: "{{ snipe_install_dir }}/composer.phar"
-    warn: false
   become: true
 
 - name: Install snipe dependencies
@@ -60,14 +59,12 @@
   args:
     chdir: "{{ snipe_install_dir }}"
     creates: "{{ snipe_install_dir }}/vendor"
-    warn: false
   become: true
 
 - name: Dump auto-load
   ansible.builtin.shell: "export COMPOSER_ALLOW_SUPERUSER=1; php composer.phar dump-autoload"
   args:
     chdir: "{{ snipe_install_dir }}"
-    warn: false
   changed_when: true
   become: true
 
@@ -75,7 +72,6 @@
   ansible.builtin.command: php artisan key:generate --force
   args:
     chdir: "{{ snipe_install_dir }}"
-    warn: false
   when: snipe_app_key == 'ChangeMe'
   become: true
 
@@ -83,7 +79,6 @@
   ansible.builtin.command: php artisan migrate --force
   args:
     chdir: "{{ snipe_install_dir }}"
-    warn: false
   changed_when: true
   become: true
 
@@ -91,7 +86,6 @@
   ansible.builtin.command: php artisan config:clear
   args:
     chdir: "{{ snipe_install_dir }}"
-    warn: false
   changed_when: true
   become: true
 
@@ -99,7 +93,6 @@
   ansible.builtin.command: php artisan config:cache
   args:
     chdir: "{{ snipe_install_dir }}"
-    warn: false
   changed_when: true
   become: true
 
