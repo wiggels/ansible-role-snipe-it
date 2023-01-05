@@ -6,3 +6,9 @@
   ansible.builtin.service:
     name: nginx
     state: restarted
+
+- name: Git dubious ownership
+  ansible.builtin.shell: "git config --global --add safe.directory {{ snipe_install_dir }}"
+  args:
+    executable: /bin/bash
+  become: true

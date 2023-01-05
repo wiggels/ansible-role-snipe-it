@@ -103,3 +103,4 @@
     group: www-data
     recurse: true
   become: true
+  notify: Git dubious ownership
