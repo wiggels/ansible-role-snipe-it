@@ -47,7 +47,7 @@
   become: true
 
 - name: Install composer
-  ansible.builtin.shell: set -o pipefail && curl -sS https://getcomposer.org/installer | php
+  ansible.builtin.shell: set -o pipefail && curl -sS https://getcomposer.org/installer | php{{ snipe_php_ver }}
   args:
     chdir: "{{ snipe_install_dir }}"
     executable: /bin/bash
@@ -55,42 +55,42 @@
   become: true
 
 - name: Install snipe dependencies
-  ansible.builtin.shell: "export COMPOSER_ALLOW_SUPERUSER=1; php composer.phar install --no-dev --prefer-source"
+  ansible.builtin.shell: "export COMPOSER_ALLOW_SUPERUSER=1; php{{ snipe_php_ver }} composer.phar install --no-dev --prefer-source"
   args:
     chdir: "{{ snipe_install_dir }}"
     creates: "{{ snipe_install_dir }}/vendor"
   become: true
 
 - name: Dump auto-load
-  ansible.builtin.shell: "export COMPOSER_ALLOW_SUPERUSER=1; php composer.phar dump-autoload"
+  ansible.builtin.shell: "export COMPOSER_ALLOW_SUPERUSER=1; php{{ snipe_php_ver }} composer.phar dump-autoload"
   args:
     chdir: "{{ snipe_install_dir }}"
   changed_when: true
   become: true
 
 - name: Generate app_key
-  ansible.builtin.command: php artisan key:generate --force
+  ansible.builtin.command: php{{ snipe_php_ver }} artisan key:generate --force
   args:
     chdir: "{{ snipe_install_dir }}"
   when: snipe_app_key == 'ChangeMe'
   become: true
 
 - name: Run migrate commands
-  ansible.builtin.command: php artisan migrate --force
+  ansible.builtin.command: php{{ snipe_php_ver }} artisan migrate --force
   args:
     chdir: "{{ snipe_install_dir }}"
   changed_when: true
   become: true
 
 - name: Clear config
-  ansible.builtin.command: php artisan config:clear
+  ansible.builtin.command: php{{ snipe_php_ver }} artisan config:clear
   args:
     chdir: "{{ snipe_install_dir }}"
   changed_when: true
   become: true
 
 - name: Clear cache
-  ansible.builtin.command: php artisan config:cache
+  ansible.builtin.command: php{{ snipe_php_ver }} artisan config:cache
   args:
     chdir: "{{ snipe_install_dir }}"
   changed_when: true
