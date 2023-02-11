@@ -1,0 +1,25 @@
+---
+- hosts: localhost
+  connection: local
+  remote_user: root
+  roles:
+    - ansible-role-snipe-it
+
+  tasks:
+  - name: Remove default vhost in nginx
+    ansible.builtin.file:
+      path: /etc/nginx/conf.d/default.conf
+      state: absent
+    become: true
+
+  - name: Make sure nginx service is restarted
+    ansible.builtin.systemd:
+      state: restarted
+      name: nginx
+    become: true
+
+  - name: Test reachability of /setup
+    ansible.builtin.uri:
+      url: "http://localhost/setup"
+      method: GET
+    register: _result
