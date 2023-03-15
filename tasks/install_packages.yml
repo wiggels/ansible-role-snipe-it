@@ -11,7 +11,7 @@
       - git
       - debconf-utils
       - unzip
-      - php-common
+      - "php{{ snipe_php_ver }}-common"
       - php-pear
       - curl
       - gnupg2
