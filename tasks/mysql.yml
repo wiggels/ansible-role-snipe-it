@@ -16,6 +16,8 @@
 
 - name: Delete anonymous user
   community.mysql.mysql_user:
+    login_user: "{{ omit if lookup('ansible.builtin.env', 'GITHUB_ACTIONS') is not defined else 'root' }}"
+    login_password: "{{ omit if lookup('ansible.builtin.env', 'GITHUB_ACTIONS') is not defined else 'root' }}"
     name: ""
     host_all: true
     state: absent
@@ -23,6 +25,8 @@
 
 - name: Delete hostname-based root user
   community.mysql.mysql_user:
+    login_user: "{{ omit if lookup('ansible.builtin.env', 'GITHUB_ACTIONS') is not defined else 'root' }}"
+    login_password: "{{ omit if lookup('ansible.builtin.env', 'GITHUB_ACTIONS') is not defined else 'root' }}"
     name: root
     host: "{{ ansible_nodename }}"
     state: absent
@@ -30,18 +34,24 @@
 
 - name: Remove test database
   community.mysql.mysql_db:
+    login_user: "{{ omit if lookup('ansible.builtin.env', 'GITHUB_ACTIONS') is not defined else 'root' }}"
+    login_password: "{{ omit if lookup('ansible.builtin.env', 'GITHUB_ACTIONS') is not defined else 'root' }}"
     name: test
     state: absent
   become: true
 
 - name: Create snipeit database
   community.mysql.mysql_db:
+    login_user: "{{ omit if lookup('ansible.builtin.env', 'GITHUB_ACTIONS') is not defined else 'root' }}"
+    login_password: "{{ omit if lookup('ansible.builtin.env', 'GITHUB_ACTIONS') is not defined else 'root' }}"
     name: "{{ snipe_db_database }}"
     state: present
   become: true
 
 - name: Create snipeit user
   community.mysql.mysql_user:
+    login_user: "{{ omit if lookup('ansible.builtin.env', 'GITHUB_ACTIONS') is not defined else 'root' }}"
+    login_password: "{{ omit if lookup('ansible.builtin.env', 'GITHUB_ACTIONS') is not defined else 'root' }}"
     name: "{{ snipe_db_username }}"
     password: "{{ snipe_db_password }}"
     priv: "{{ snipe_db_database }}.*:ALL"

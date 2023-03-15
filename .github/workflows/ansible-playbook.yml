@@ -1,0 +1,35 @@
+name: ansible-role-snipe-it
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    name: Test on python ${{ matrix.python_version }} and ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        python_version: ['3.9', '3.10', '3.11']
+        os: [ubuntu-22.04, ubuntu-20.04]
+
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python_version }}
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          pip3 install ansible
+          printf '[defaults]\nroles_path=../' >ansible.cfg
+      - name: Install ansible-galaxy requirements
+        uses: nick-fields/retry@v2
+        with:
+          timeout_seconds: 180
+          max_attempts: 3
+          retry_on: error
+          command: ansible-galaxy install -r tests/requirements.yml
+      - name: Run playbook
+        run: |
+          ansible-playbook tests/test-gha.yml -i tests/inventory
