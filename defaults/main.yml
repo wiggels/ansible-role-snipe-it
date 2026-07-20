@@ -1,24 +1,37 @@
 ---
 # defaults file for snipe-it
 
+# Set to true to purge any existing apache/php/nginx packages before install
 snipe_cleanup: false
+
 snipe_install_dir: /opt/snipe-it
-snipe_install_version: 6.0.14
-snipe_php_ver: 8.1
+snipe_install_version: 8.6.3
+snipe_repo_url: https://github.com/grokability/snipe-it.git
+
+# On Ubuntu 24.04 PHP comes from ppa:ondrej/php (defaults to 8.4). Ubuntu
+# 26.04 ships PHP 8.5 natively, so the PPA is skipped there. Override
+# snipe_php_ver / snipe_php_ppa_enabled to pin a specific setup.
+snipe_php_ver: "{{ '8.5' if ansible_distribution_release == 'resolute' else '8.4' }}"
+snipe_php_ppa_enabled: "{{ ansible_distribution_release != 'resolute' }}"
 snipe_http_server: nginx
 snipe_domain: localhost
 snipe_ssl_enabled: false
 snipe_ssl_key: "/etc/ssl/private/{{ snipe_domain }}.key"
 snipe_ssl_cert: "/etc/ssl/certs/{{ snipe_domain }}-fullchain.crt"
-snipe_http_protocol: "{{ 'https://' if (snipe_ssl_enabled == true) else 'http://' }}"
+snipe_http_protocol: "{{ 'https://' if snipe_ssl_enabled else 'http://' }}"
 snipe_database_software: mysql
+
+# Install a cron entry for the Laravel scheduler (required for backups,
+# expected check-in notifications, etc.)
+snipe_scheduler_enabled: true
 
 snipe_app_env: production
 snipe_app_debug: false
 snipe_app_key: ChangeMe
 snipe_app_url: "{{ snipe_http_protocol }}{{ snipe_domain }}"
 snipe_app_timezone: America/New_York
-snipe_app_locale: en
+snipe_app_locale: en-US
+snipe_max_results: 500
 
 snipe_db_host: localhost
 snipe_db_database: snipeit
@@ -28,31 +41,50 @@ snipe_db_prefix: "null"
 snipe_db_dump_path: /usr/bin
 snipe_db_port: 3306
 
-snipe_mail_driver: smtp
+# Credentials used to administer the local MySQL server (create the database
+# and application user). Leave unset to connect as root over the unix socket,
+# which is the default on a fresh Ubuntu MySQL install.
+snipe_db_admin_user: ~
+snipe_db_admin_password: ~
+snipe_db_admin_socket: /var/run/mysqld/mysqld.sock
+
+# The app DB user authenticates with caching_sha2_password (the MySQL 8+
+# default; mysql_native_password is gone as of MySQL 8.4/Ubuntu 26.04). A
+# deterministic 20-char salt keeps password management idempotent; derived
+# from the credentials by default, override with any 20-character string.
+snipe_db_password_salt: "{{ ((snipe_db_username ~ snipe_db_password) | md5)[:20] }}"
+
+snipe_mail_mailer: smtp
 snipe_mail_host: localhost
 snipe_mail_port: 25
 snipe_mail_username: false
 snipe_mail_password: false
-snipe_mail_encryption: "null"
 snipe_mail_from_addr: snipe-it@example.com
 snipe_mail_from_name: Snipe-IT
 snipe_mail_replyto_addr: false
 snipe_mail_replyto_name: false
-snipe_mail_auto_embed: true
-snipe_mail_auto_embed_method: base64
+snipe_mail_auto_embed_method: attachment
+snipe_mail_tls_verify_peer: true
 
 snipe_image_lib: gd
 
-snipe_session_lifetime: 30
+snipe_session_lifetime: 12000
 snipe_expire_on_close: false
 snipe_encrypt: false
 snipe_cookie_name: snipeit_session
 snipe_cookie_domain: "null"
 snipe_secure_cookies: "{{ snipe_ssl_enabled }}"
-snipe_api_token_expiration_years: 40
+snipe_api_token_expiration_years: 15
 
 snipe_login_max_attempts: 5
 snipe_login_lockout_duration: 60
 
 snipe_allow_backup_delete: false
 snipe_allow_data_purge: false
+
+# Any additional .env settings, rendered verbatim at the end of the file.
+# Example:
+#   snipe_env_extra:
+#     ENABLE_HSTS: "true"
+#     LOG_MAX_DAYS: 30
+snipe_env_extra: {}

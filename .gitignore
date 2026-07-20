@@ -1,0 +1,7 @@
+*.retry
+.ansible/
+.venv/
+venv/
+__pycache__/
+.cache/
+ansible.cfg

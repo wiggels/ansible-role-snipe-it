@@ -1,24 +1,27 @@
+---
 galaxy_info:
   role_name: snipeit
   namespace: wiggels
   author: Hunter Wigelsworth
   description: Install and Configure Snipe-IT
-
   license: MIT
-
-  min_ansible_version: "2.9"
+  min_ansible_version: "2.16"
 
   platforms:
     - name: Ubuntu
       versions:
-        - focal
-        - jammy
+        - noble
+        - resolute
 
   galaxy_tags:
     - snipeit
     - inventory
+    - assets
+    - nginx
+    - mysql
+    - php
 
 collections:
-  - nginxinc.nginx_core
+  - ansible.mysql
 
 dependencies: []

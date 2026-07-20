@@ -1,4 +1,6 @@
 ---
 exclude_paths:
-  - tests/
   - .github/
+
+mock_roles:
+  - ansible-role-snipe-it

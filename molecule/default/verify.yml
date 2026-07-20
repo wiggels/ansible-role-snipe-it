@@ -1,0 +1,41 @@
+---
+- name: Verify
+  hosts: all
+  become: true
+  tasks:
+    - name: Gather service facts
+      ansible.builtin.service_facts:
+
+    - name: Assert required services are running
+      ansible.builtin.assert:
+        that:
+          - ansible_facts.services['nginx.service'].state == 'running'
+          - ansible_facts.services['mysql.service'].state == 'running'
+          - >
+            ansible_facts.services | dict2items
+            | selectattr('key', 'match', 'php.*-fpm.service')
+            | selectattr('value.state', 'equalto', 'running')
+            | list | length > 0
+        fail_msg: "One or more required services (nginx, mysql, php-fpm) is not running"
+
+    - name: Request the Snipe-IT setup page
+      ansible.builtin.uri:
+        url: http://localhost/setup
+        return_content: true
+        status_code: 200
+      register: setup_page
+      retries: 3
+      delay: 5
+      until: setup_page.status == 200
+
+    - name: Assert the setup page is served by Snipe-IT
+      ansible.builtin.assert:
+        that:
+          - "'Snipe-IT' in setup_page.content"
+        fail_msg: "http://localhost/setup did not return a Snipe-IT page"
+
+    - name: Assert scheduler cron entry exists
+      ansible.builtin.command: crontab -l -u www-data
+      register: www_crontab
+      changed_when: false
+      failed_when: "'artisan schedule:run' not in www_crontab.stdout"

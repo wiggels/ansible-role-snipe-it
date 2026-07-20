@@ -1,9 +1,4 @@
 ---
-- name: Add php ppa repos
-  ansible.builtin.apt_repository:
-    repo: ppa:ondrej/php
-  become: true
-
 - name: Install prerequisites
   ansible.builtin.apt:
     name:
@@ -11,15 +6,22 @@
       - git
       - debconf-utils
       - unzip
-      - "php{{ snipe_php_ver }}-common"
-      - php-pear
       - curl
       - gnupg2
       - ca-certificates
       - lsb-release
-      - ubuntu-keyring
+      - cron
+      - acl
     state: present
+    update_cache: true
+    cache_valid_time: 3600
   become: true
+
+- name: Add php ppa repository
+  ansible.builtin.apt_repository:
+    repo: ppa:ondrej/php
+  become: true
+  when: snipe_php_ppa_enabled | bool
 
 - name: "Install php {{ snipe_php_ver }}"
   ansible.builtin.apt:
@@ -29,18 +31,24 @@
       - "php{{ snipe_php_ver }}-cli"
       - "php{{ snipe_php_ver }}-common"
       - "php{{ snipe_php_ver }}-curl"
-      - "php{{ snipe_php_ver }}-dev"
       - "php{{ snipe_php_ver }}-gd"
       - "php{{ snipe_php_ver }}-intl"
       - "php{{ snipe_php_ver }}-ldap"
       - "php{{ snipe_php_ver }}-mbstring"
       - "php{{ snipe_php_ver }}-mysql"
-      - "php{{ snipe_php_ver }}-opcache"
       - "php{{ snipe_php_ver }}-readline"
       - "php{{ snipe_php_ver }}-xml"
       - "php{{ snipe_php_ver }}-zip"
     state: present
   become: true
+
+# Distro PHP builds (Ubuntu 26.04+) bundle opcache; the PPA ships it separately
+- name: "Install opcache for php {{ snipe_php_ver }}"
+  ansible.builtin.apt:
+    name: "php{{ snipe_php_ver }}-opcache"
+    state: present
+  become: true
+  when: snipe_php_ppa_enabled | bool
 
 - name: Enable and start PHP FPM service
   ansible.builtin.service:

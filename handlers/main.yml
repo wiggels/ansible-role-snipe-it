@@ -7,8 +7,8 @@
     name: nginx
     state: restarted
 
-- name: Git dubious ownership # noqa command-instead-of-module
-  ansible.builtin.shell: "git config --global --add safe.directory {{ snipe_install_dir }}"
-  args:
-    executable: /bin/bash
+- name: Restart PHP FPM
   become: true
+  ansible.builtin.service:
+    name: "php{{ snipe_php_ver }}-fpm"
+    state: restarted
